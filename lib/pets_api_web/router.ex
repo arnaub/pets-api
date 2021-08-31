@@ -19,6 +19,12 @@ defmodule PetsApiWeb.Router do
     get "/", PageController, :index
   end
 
+  scope "/api", PetsApiWeb.Api do
+    pipe_through :api
+
+    resources "/owners", OwnerController, except: [:new, :edit]
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PetsApiWeb do
   #   pipe_through :api

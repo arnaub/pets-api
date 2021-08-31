@@ -8,6 +8,11 @@ defmodule PetsApi.Owners do
 
   alias PetsApi.Owners.Owner
 
+  def owner_api_object(owner) do
+    owner
+    |> Map.take([:id, :name, :inserted_at, :updated_at])
+  end
+
   @doc """
   Returns the list of owners.
 
@@ -36,6 +41,7 @@ defmodule PetsApi.Owners do
 
   """
   def get_owner!(id), do: Repo.get!(Owner, id)
+  def get_owner(id), do: Repo.get(Owner, id)
 
   @doc """
   Creates a owner.
