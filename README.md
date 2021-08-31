@@ -2,6 +2,10 @@
 
 To start your Phoenix server:
 
+  * Setup local configuration:
+    * copy `config/dev.local.exs.example` to `config/dev.local.exs`
+    * copy `config/test.local.exs.example` to `config/test.local.exs`
+    * Update `.local.exs` files if it's needed.
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
   * Install Node.js dependencies with `npm install` inside the `assets` directory
