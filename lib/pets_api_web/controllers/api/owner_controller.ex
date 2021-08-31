@@ -15,7 +15,7 @@ defmodule PetsApiWeb.Api.OwnerController do
         json(conn, %{owner: Owners.owner_api_object(owner), errors: []})
 
       nil ->
-        json(conn, %{owner: nil, errors: [field: "id", message: "User not found"]})
+        json(conn, %{owner: nil, errors: [%{field: "id", message: "User not found"}]})
     end
   end
 
@@ -29,7 +29,32 @@ defmodule PetsApiWeb.Api.OwnerController do
     end
   end
 
-  def update(conn, %{"id" => id}, params) do
+  def update(conn, %{"id" => id, "owner" => owner_params}) do
+    owner = Owners.get_owner!(id)
+
+    case Owners.update_owner(owner, owner_params) do
+      {:ok, owner} ->
+        json(conn, %{owner: Owners.owner_api_object(owner), errors: []})
+
+      {:error, changeset} ->
+        json(conn, %{owner: nil, errors: changeset.errors |> Enum.map(&get_error_name(&1))})
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    case Owners.get_owner(id) do
+      %Owner{} = owner ->
+        case Owners.delete_owner(owner) do
+          {:ok, owner} ->
+            json(conn, %{owner: Owners.owner_api_object(owner), errors: []})
+
+          {:error, changeset} ->
+            json(conn, %{owner: nil, errors: changeset.errors |> Enum.map(&get_error_name(&1))})
+        end
+
+      nil ->
+        json(conn, %{owner: nil, errors: [%{field: "id", message: "User not found"}]})
+    end
   end
 
   defp get_error_name({key, {message, _validations}}) do
