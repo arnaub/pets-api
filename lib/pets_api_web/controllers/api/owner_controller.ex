@@ -4,8 +4,9 @@ defmodule PetsApiWeb.Api.OwnerController do
   alias PetsApi.Owners
   alias PetsApi.Owners.Owner
 
-  def index(conn, _params) do
-    owners = Owners.list_owners() |> Enum.map(&Owners.owner_api_object(&1))
+  def index(conn, params) do
+    pagination_params = build_pagination_params(params)
+    owners = Owners.paginate_owners(pagination_params) |> Enum.map(&Owners.owner_api_object(&1))
     json(conn, %{owners: owners, errors: []})
   end
 
@@ -55,6 +56,13 @@ defmodule PetsApiWeb.Api.OwnerController do
       nil ->
         json(conn, %{owner: nil, errors: [%{field: "id", message: "User not found"}]})
     end
+  end
+
+  defp build_pagination_params(params) do
+    %{
+      per_page: String.to_integer(params["per_page"] || Owners.default_per_page()),
+      page: String.to_integer(params["page"] || Owners.default_page())
+    }
   end
 
   defp get_error_name({key, {message, _validations}}) do

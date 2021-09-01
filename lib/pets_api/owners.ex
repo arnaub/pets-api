@@ -13,6 +13,24 @@ defmodule PetsApi.Owners do
     |> Map.take([:id, :name, :inserted_at, :updated_at])
   end
 
+  def default_per_page, do: "5"
+  def default_page, do: "1"
+
+  @doc """
+  Returns a list of owners matching the given params.
+  Example params:
+  %{page: 2, per_page: 5},
+  """
+  def paginate_owners(%{page: page, per_page: per_page}) do
+    query =
+      from o in Owner,
+        offset: ^((page - 1) * per_page),
+        limit: ^per_page,
+        order_by: o.id
+
+    Repo.all(query)
+  end
+
   @doc """
   Returns the list of owners.
 
