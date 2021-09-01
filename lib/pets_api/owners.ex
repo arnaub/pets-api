@@ -8,6 +8,9 @@ defmodule PetsApi.Owners do
 
   alias PetsApi.Owners.Owner
 
+  @doc """
+  Returns an owner object for API responses.
+  """
   def owner_api_object(owner) do
     owner
     |> Map.take([:id, :name, :inserted_at, :updated_at])

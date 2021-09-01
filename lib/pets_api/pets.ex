@@ -8,6 +8,9 @@ defmodule PetsApi.Pets do
 
   alias PetsApi.Pets.Pet
 
+  @doc """
+  Returns a pet object for API responses.
+  """
   def pet_api_object(pet) do
     pet
     |> Map.take([:id, :name, :inserted_at, :updated_at])
@@ -33,7 +36,8 @@ defmodule PetsApi.Pets do
   %{page: 2, per_page: 5},
   """
   def paginate_pets(%{page: _page, per_page: _per_page} = params) do
-    Repo.all(pets_pagination_query(Pet, params))
+    pets_pagination_query(Pet, params)
+    |> Repo.all()
   end
 
   @doc """
