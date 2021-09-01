@@ -22,7 +22,11 @@ defmodule PetsApiWeb.Router do
   scope "/api", PetsApiWeb.Api do
     pipe_through :api
 
-    resources "/owners", OwnerController, except: [:new, :edit]
+    resources "/owners", OwnerController, except: [:new, :edit] do
+      resources "/pets", PetController, only: [:index]
+    end
+
+    resources "/pets", PetController, only: [:index]
   end
 
   # Other scopes may use custom stacks.
